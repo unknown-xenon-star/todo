@@ -1,6 +1,7 @@
 tasks = []
 
-with open("tasks.txt", 'w+') as f:
+with open("tasks.txt", 'r+') as f:
+    print("Reading Previous Log's")
     for line in f:
         line = line.strip()
         if not line:
@@ -15,9 +16,10 @@ with open("tasks.txt", 'w+') as f:
 def task_write():
     with open("tasks.txt", 'w+') as f:
         for t in tasks:
-            status = tasks["status"]
-            task = tasks["task"]
+            status = t["status"]
+            task = t["task"]
             f.write(f"{int(status)}: {task}\n")
+        print("Writing Log File....")
         f.close()
 
 def display_menu():
@@ -31,8 +33,8 @@ def display_menu():
 
 def display_tasks():
     for index, taskANDstatus in enumerate(tasks):
-        task = tasks[taskANDstatus]["task"]
-        status = "Done" if tasks[taskANDstatus]["status"] else "Not Done"
+        task = taskANDstatus["task"]
+        status = "Done" if taskANDstatus["status"] else "Not Done"
         print(f"{index + 1}. {task} - {status}")
 
 def main():
@@ -115,6 +117,7 @@ def main():
 
         elif choice == '6':
             print("Exiting the To-Do List.")
+            task_write()
             break
 
         else:
