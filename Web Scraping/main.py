@@ -1,6 +1,5 @@
 import requests
 from url_parse import urlparse
-from pprint import pprint
 
 # URL of the websites you want to scrape
 url = str(input("Enter URL: "))
@@ -9,10 +8,10 @@ url = str(input("Enter URL: "))
 parsed_url = urlparse(url)
 
 # Print out the components
-print("|"+"-"*20+"|")
+print("|" + "-"*(4+len(url)) + "|")
 for key, value in parsed_url.items():
     print(f"|  {key.capitalize()}: {value}")
-print("|"+"-"*20+"|")
+print("|" + "-"*(4+len(url)) + "|")
 
 # from urllib.parse import urlparse
 
@@ -36,9 +35,10 @@ try:
         # Print the source code of the webpage
         source_code = response.text
         print(source_code) # This will print the HTML source code of the page
-        print("\nWriting To Index.html")
+        print("\n....Writing To Index.html")
         with open("Index.html", "w+") as f:
             f.write(source_code)
+        print("\tDONE WRITING..")
     else:
         print(f"Failed to retrive the page. Status code: {respons.status_code}")
 except requests.exceptions.RequestException as e:
