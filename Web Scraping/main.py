@@ -34,7 +34,11 @@ try:
     # Check if the request to fetch the source code
     if response.status_code == 200:
         # Print the source code of the webpage
-        print(response.text) # This will print the HTML source code of the page
+        source_code = response.text
+        print(source_code) # This will print the HTML source code of the page
+        print("\nWriting To Index.html")
+        with open("Index.html", "w+") as f:
+            f.write(source_code)
     else:
         print(f"Failed to retrive the page. Status code: {respons.status_code}")
 except requests.exceptions.RequestException as e:
