@@ -1,4 +1,3 @@
-
 def urlparse(url):
     # Initialize components to store the parsed results
     scheme = ""
@@ -42,4 +41,4 @@ def urlparse(url):
         "path": path,
         "query": query,
         "fragment": fragment
-    } 
+    }
