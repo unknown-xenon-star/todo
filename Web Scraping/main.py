@@ -2,6 +2,7 @@ import requests
 from url_parse import urlparse
 from os import makedirs
 from sys import exit
+from Tabular import clean_print
 # URL of the websites you want to scrape
 url = str(input("Enter URL: "))
 file_name = str(input("Enter file_name: "))
@@ -11,8 +12,7 @@ parsed_url = urlparse(url)
 
 # Print out the components
 print("|" + "-"*(4+len(url)) + "|")
-for key, value in parsed_url.items():
-    print(f"|  {key.capitalize()}: {value}")
+clean_print(dict(parsed_url.items()))
 print("|" + "-"*(4+len(url)) + "|")
 
 # from urllib.parse import urlparse
