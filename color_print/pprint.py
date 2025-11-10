@@ -2,8 +2,11 @@ from os import system
 # Support for some Not-Effective terminal color Scenarios
 system("")
 
+Asci_end = "\033[0m"
+
 def pprint(text, color="default", end_with="\n"):
     colors = {
+    	"bold": 1,
         "default": 39,      # Default color
         "red": 31,
         "green": 32,
@@ -19,6 +22,6 @@ def pprint(text, color="default", end_with="\n"):
         color_code = colors.get(color, 39)
         print(f"\033[{color_code}m{text}\033[0m", end=end_with)
     elif isinstance(color,  int):
-        print(f"\033[38;5;{color_code}m{text}\033[0m", end=end_with)
+        print(f"\033[38;5;{color}m{text}\033[0m", end=end_with)
     else:
         raise ValueError
