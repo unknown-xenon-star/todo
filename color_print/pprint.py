@@ -5,6 +5,7 @@ system("")
 Asci_end = "\033[0m"
 
 def pprint(text, color="default", end_with="\n"):
+    """Print colored text safely in most terminals."""
     colors = {
     	"bold": 1,
         "default": 39,      # Default color
@@ -16,8 +17,11 @@ def pprint(text, color="default", end_with="\n"):
         "cyan": 36,
         "white": 37
     }
+
+    # Handle string color names
     if isinstance(color, str):
-        if color not in list(colors.keys()):
+        if color not in colors:
+            # Avoid recusive pprint() call here (it could loop)
             pprint(f">> Not A PreDefied Color, Selecting Deafult", "red") 
         color_code = colors.get(color, 39)
         print(f"\033[{color_code}m{text}\033[0m", end=end_with)
