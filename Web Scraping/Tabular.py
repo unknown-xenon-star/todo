@@ -1,42 +1,59 @@
-# use file pprint.py in ../color_print/
+# use file color_print.py in ../color_print/
 try:
-    from pprint import pprint
+    from color_print import pprint
 except ImportError:
     pass
 
-def tabular(data):
+from clean_print import printing_as_per_type
+
+
+
+# *args : ALLOW TO GET TUPLES AS INPUT
+# **kargs : ALLOW TO GET DICT AS INPUT
+def tabular_format(data):
     """Print dictionary contents in Tabular format, Supports nested dicts & lists."""
     # Convert Keys and values to strings for safe length calculation
     str_keys = [str(k) for k in data.keys()]
-    str_values = [str(v) for v in data.values() if not isinstance(v ,(dict, list, tuple))]
+    str_values = [str(v) for v in data.values()]
 
-    max_key_width = int(len(max(str_keys, key=len)))
-    max_value_width = int(len(max(str_values, key=len))) if str_values else 0
+    # max_key_width = int(max((len(k) for k in str_keys), default=0))
+    max_key_width = int(max(list(map(len, str_keys)), default=0))
+    max_value_width = int(max(list(map(len, str_values)), default=0))
     
     for key, value in data.items():
         key_str = str(key)
-        if isinstance(value, (list, tuple)):
-            # Print list/tuple elements one per line
-            try:
-                pprint(f"| {key_str:<{max_key_width + 1}}:", "red", "")
-            except NameError:
-                print(f"| {key_str:<{max_key_width + 1}}:")
-            for item in value:
-                print(f"   - {item}")
-        else:
-            value_str = str(value)
-            try:
-                pprint(f"| {key_str:<{max_key_width + 1}}:", "red", "")
-                pprint(f"{value_str:<{max_value_width + 1}}|", "cyan")
-            except NameError:
-                print(f"| {key_str:<{max_key_width + 1}}:", end="")
-                print(f"{value_str:<{max_value_width + 1}}|")
-            except Exception as e:
-                raise Exception(f"\033[1mUnExpected Error\033[0m: {e}")
+        value_str = str(value)
+        try:
+            pprint(f"| {key_str:<{max_key_width + 1}}:", "red", "")
+            pprint(f"{value_str:<{max_value_width + 1}}|", "cyan")
+        except NameError:
+            print(f"| {key_str:<{max_key_width + 1}}:", end="")
+            print(f"{value_str:<{max_value_width + 1}}|")
+        except Exception as e:
+            raise Exception(f"\033[1mUnExpected Error\033[0m: {e}")
 
 
 def clean_print(data):
-    if isinstance(data, dict):
-        tabular(data)
+    """
+    Unified Formatter:
+    - Dicts: printed in a clean readable tree form
+    - Lists/Tuples: handles multi-level nesting
+    - Flat dicts printed in aligned tabular form
+    """
+    
+    if is_flat_dict(data):
+        tabular_format(data)
     else:
-        print("Not Supproted Yet", type(data))
+        printing_as_per_type(data)
+
+
+def is_flat_dict(data):
+    """
+    Returns True if the dictionary is flat (no nested dicts or lists), False otherwise.
+    """
+    if not isinstance(data, dict):
+        raise ValueError("Input must be a dictionary")
+    for value in data.values():
+        if isinstance(value, dict) or isinstance(value, list):
+            return False
+    return True
